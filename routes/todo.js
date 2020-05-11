@@ -56,6 +56,9 @@ router.get('/listPaged', async (req, res) => {
 
 router.post('/complete/:id', async (req, res) => {
     try {
+        if(!(await toDoModel.userHasAccessToEntity(req.params.id, req.currentUser.userId))){
+            throw new 'You do not have access to this entity';
+        }
         const todo = await toDoModel.completeToDo(req.params.id);
         res.send("Ok");
     } catch (err) {
@@ -66,6 +69,9 @@ router.post('/complete/:id', async (req, res) => {
 
 router.post('/delete/:id', async (req, res) => {
     try {
+        if(!(await toDoModel.userHasAccessToEntity(req.params.id, req.currentUser.userId))){
+            throw new 'You do not have access to this entity';
+        }
         const todo = await toDoModel.deleteToDo(req.params.id);
         res.send("Ok");
     } catch (err) {

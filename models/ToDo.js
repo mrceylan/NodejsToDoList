@@ -42,8 +42,12 @@ toDoSchema.statics.listUserToDosPaged = async function (userId, pageNumber, page
     if (pageNumber == 0) {
         pageNumber = 1;
     }
-    return await this.model(_model).find({ userId: userId, isDeleted: false }, 'description isCompleted createDate', 
-    { skip: (pageNumber - 1) * pageSize, limit: pageSize, sort: { createDate: -1 } });
+    return await this.model(_model).find({ userId: userId, isDeleted: false }, 'description isCompleted createDate',
+        { skip: (pageNumber - 1) * pageSize, limit: pageSize, sort: { createDate: -1 } });
+};
+
+toDoSchema.statics.userHasAccessToEntity = async function (id, userId) {
+    return await this.model(_model).exists({ _id: id, userId: userId });
 };
 
 toDoSchema.statics.completeToDo = async function (id) {
